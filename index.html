@@ -367,7 +367,7 @@
         '<td class="col-index">' + work.yearRank + '</td>' +
         '<td class="col-title">' + esc(work.title) + '</td>' +
         '<td class="col-medium">' + esc(work.medium) + '</td>' +
-        '<td class="col-size">' + esc(work.size) + '</td>' +
+        '<td class="col-size" data-cm="' + esc(work.size) + '" data-unit="cm">' + esc(work.size) + '</td>' +
         '<td class="col-year">' + esc(String(work.year)) + '</td>';
 
       var detail = document.createElement("tr");
@@ -384,6 +384,21 @@
 
       tr.addEventListener("click", function() {
         detail.classList.toggle("open");
+      });
+
+      tr.querySelector("td.col-size").addEventListener("click", function(e) {
+        e.stopPropagation();
+        var td = this;
+        if (td.dataset.unit === "cm") {
+          var converted = td.dataset.cm.replace(/[\d.]+/g, function(n) {
+            return Math.round(parseFloat(n) / 2.54 * 10) / 10;
+          }).replace(/cm$/, "in");
+          td.textContent = converted;
+          td.dataset.unit = "in";
+        } else {
+          td.textContent = td.dataset.cm;
+          td.dataset.unit = "cm";
+        }
       });
 
       tbody.appendChild(tr);
