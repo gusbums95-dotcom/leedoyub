@@ -311,6 +311,10 @@
 
   works.forEach(function(w, i) { w.idx = i; });
 
+  // yearRank: 1 = oldest year, N = newest year
+  var byYear = works.slice().sort(function(a, b) { return a.year - b.year; });
+  byYear.forEach(function(w, i) { w.yearRank = i + 1; });
+
   var sortCol = "year";
   var sortDesc = true;
   var allRows = [];
@@ -360,7 +364,7 @@
       var tr = document.createElement("tr");
       tr.className = "work-row";
       tr.innerHTML =
-        '<td class="col-index">' + (work.idx + 1) + '</td>' +
+        '<td class="col-index">' + work.yearRank + '</td>' +
         '<td class="col-title">' + esc(work.title) + '</td>' +
         '<td class="col-medium">' + esc(work.medium) + '</td>' +
         '<td class="col-size">' + esc(work.size) + '</td>' +
