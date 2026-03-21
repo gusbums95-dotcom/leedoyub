@@ -21,6 +21,52 @@
     a { color: #00f; }
     a:visited { color: #551a8b; }
 
+    /* ── Page wrapper: sidebar + main ── */
+    #wrapper {
+      display: flex;
+      align-items: flex-start;
+    }
+
+    /* ── Sidebar ── */
+    #sidebar {
+      display: none;
+      width: 260px;
+      min-width: 260px;
+      border-right: 1px solid #000;
+      padding-right: 12px;
+      margin-right: 12px;
+    }
+
+    #sidebar.open {
+      display: block;
+    }
+
+    #sidebar p {
+      margin-bottom: 6px;
+    }
+
+    #sidebar .sb-section {
+      margin-bottom: 14px;
+    }
+
+    #sidebar .sb-label {
+      font-weight: bold;
+    }
+
+    #sidebar input[type="email"] {
+      font: normal 12px / 1.4em Arial, Helvetica, sans-serif;
+      border: 1px solid #000;
+      border-radius: 0;
+      padding: 1px 3px;
+      width: 100%;
+    }
+
+    /* ── Main content ── */
+    #main {
+      flex: 1;
+      min-width: 0;
+    }
+
     /* ── Header ── */
     #page-header {
       display: flex;
@@ -40,6 +86,9 @@
       font-weight: bold;
       width: 22%;
       flex-shrink: 0;
+      cursor: pointer;
+      text-decoration: none;
+      color: #000;
     }
 
     #search-input {
@@ -88,7 +137,6 @@
       user-select: none;
     }
 
-    /* data rows */
     #works-table tbody tr.work-row {
       cursor: pointer;
       border-bottom: 1px solid #F4F4F4;
@@ -144,7 +192,8 @@
 
     /* ── Mobile ── */
     @media (max-width: 680px) {
-      #header-gap { width: 20px; }
+      #sidebar { min-width: 0; width: 100%; border-right: none; border-bottom: 1px solid #000; margin-right: 0; padding-right: 0; margin-bottom: 8px; }
+      #wrapper { flex-direction: column; }
 
       #works-table colgroup col.col-medium,
       #works-table colgroup col.col-size { width: 0; }
@@ -161,28 +210,74 @@
 <body>
 
 <div id="page-header">
-  <span id="header-index-spacer"></span><span id="site-name">Lee Doyub</span><input id="search-input" type="search" placeholder="Search" />
+  <span id="header-index-spacer"></span><a id="site-name" href="#" onclick="toggleSidebar(event)">Lee Doyub</a><input id="search-input" type="search" placeholder="Search" />
 </div>
 
-<table id="works-table">
-  <colgroup>
-    <col class="col-index">
-    <col class="col-title">
-    <col class="col-medium">
-    <col class="col-size">
-    <col class="col-year">
-  </colgroup>
-  <thead>
-    <tr>
-      <th class="col-index" id="sort-btn" title="Sort by year">&#9660;</th>
-      <th class="col-title">Title</th>
-      <th class="col-medium">Medium</th>
-      <th class="col-size">Size</th>
-      <th class="col-year">Year</th>
-    </tr>
-  </thead>
-  <tbody id="works-body"></tbody>
-</table>
+<div id="wrapper">
+
+  <!-- ── Sidebar ── -->
+  <div id="sidebar">
+    <div class="sb-section">
+      <p><strong>Lee Doyub</strong></p>
+      <p>Lee Doyub is a Seoul-based visual artist working across painting, drawing, and installation. His practice explores the materiality of everyday objects and the layered nature of memory. Recent work focuses on the residue left by habitual actions and domestic space.</p>
+    </div>
+
+    <div class="sb-section">
+      <p>Tel. <a href="tel:+821000000000">+82 10-0000-0000</a></p>
+      <p>Email <a href="mailto:studio@leedoyub.com">studio@leedoyub.com</a></p>
+      <p>Instagram <a href="https://instagram.com/leedoyub" target="_blank" rel="noopener">@leedoyub</a></p>
+    </div>
+
+    <div class="sb-section">
+      <p><span class="sb-label">Upcoming</span></p>
+      <p>
+        <em>Matter of Margin</em><br>
+        04.05 – 05.10.2025<br>
+        Gallery Factory, Seoul
+      </p>
+      <br>
+      <p>
+        <em>After Objects</em> (group)<br>
+        06.20 – 07.30.2025<br>
+        ONE AND J. Gallery, Seoul
+      </p>
+      <br>
+      <p>
+        Cité des Arts Residency<br>
+        09 – 11.2025, Paris
+      </p>
+    </div>
+
+    <div class="sb-section">
+      <p><span class="sb-label">Mailing list</span></p>
+      <p><input type="email" placeholder="your@email.com" /></p>
+    </div>
+  </div>
+
+  <!-- ── Main ── -->
+  <div id="main">
+    <table id="works-table">
+      <colgroup>
+        <col class="col-index">
+        <col class="col-title">
+        <col class="col-medium">
+        <col class="col-size">
+        <col class="col-year">
+      </colgroup>
+      <thead>
+        <tr>
+          <th class="col-index" id="sort-btn" title="Sort by year">&#9660;</th>
+          <th class="col-title">Title</th>
+          <th class="col-medium">Medium</th>
+          <th class="col-size">Size</th>
+          <th class="col-year">Year</th>
+        </tr>
+      </thead>
+      <tbody id="works-body"></tbody>
+    </table>
+  </div>
+
+</div><!-- /wrapper -->
 
 <script>
   var works = [
@@ -258,7 +353,7 @@
     }
   ];
 
-  var sortDesc = true; // default: newest first
+  var sortDesc = true;
   var allRows = [];
 
   function esc(str) {
@@ -267,6 +362,11 @@
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;");
+  }
+
+  function toggleSidebar(e) {
+    e.preventDefault();
+    document.getElementById("sidebar").classList.toggle("open");
   }
 
   function buildTable() {
@@ -318,7 +418,6 @@
     sortDesc = !sortDesc;
     this.innerHTML = sortDesc ? "&#9660;" : "&#9650;";
     buildTable();
-    // re-apply search filter if active
     var q = document.getElementById("search-input").value.toLowerCase();
     if (q) filterRows(q);
   });
