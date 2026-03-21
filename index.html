@@ -375,7 +375,7 @@
       tr.className = "work-row";
       tr.innerHTML =
         '<td class="col-index">' + work.yearRank + '</td>' +
-        '<td class="col-title" data-en="' + esc(work.title) + '" data-ko="' + esc(work.titleKo) + '" data-lang="en">' + esc(work.title) + '</td>' +
+        '<td class="col-title">' + esc(work.title) + '</td>' +
         '<td class="col-medium">' + esc(work.medium) + '</td>' +
         '<td class="col-size" data-cm="' + esc(work.size) + '" data-unit="cm">' + esc(work.size) + '</td>' +
         '<td class="col-year">' + esc(String(work.year)) + '</td>';
@@ -394,18 +394,6 @@
 
       tr.addEventListener("click", function() {
         detail.classList.toggle("open");
-      });
-
-      tr.querySelector("td.col-title").addEventListener("click", function(e) {
-        e.stopPropagation();
-        var td = this;
-        if (td.dataset.lang === "en") {
-          td.textContent = td.dataset.ko;
-          td.dataset.lang = "ko";
-        } else {
-          td.textContent = td.dataset.en;
-          td.dataset.lang = "en";
-        }
       });
 
       tr.querySelector("td.col-size").addEventListener("click", function(e) {
