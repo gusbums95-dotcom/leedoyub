@@ -21,20 +21,23 @@
     a { color: #00f; }
     a:visited { color: #551a8b; }
 
-    /* ── Page wrapper: sidebar + main ── */
-    #wrapper {
-      display: flex;
-      align-items: flex-start;
+    /* ── Sidebar dropdown ── */
+    #site-name-wrap {
+      position: relative;
+      width: 22%;
+      flex-shrink: 0;
     }
 
-    /* ── Sidebar ── */
     #sidebar {
       display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
       width: 260px;
-      min-width: 260px;
-      border-right: 1px solid #000;
-      padding-right: 12px;
-      margin-right: 12px;
+      background: #fff;
+      border: 1px solid #000;
+      padding: 10px 12px;
+      z-index: 100;
     }
 
     #sidebar.open {
@@ -51,20 +54,6 @@
 
     #sidebar .sb-label {
       font-weight: bold;
-    }
-
-    #sidebar input[type="email"] {
-      font: normal 12px / 1.4em Arial, Helvetica, sans-serif;
-      border: 1px solid #000;
-      border-radius: 0;
-      padding: 1px 3px;
-      width: 100%;
-    }
-
-    /* ── Main content ── */
-    #main {
-      flex: 1;
-      min-width: 0;
     }
 
     /* ── Header ── */
@@ -192,8 +181,7 @@
 
     /* ── Mobile ── */
     @media (max-width: 680px) {
-      #sidebar { min-width: 0; width: 100%; border-right: none; border-bottom: 1px solid #000; margin-right: 0; padding-right: 0; margin-bottom: 8px; }
-      #wrapper { flex-direction: column; }
+      #sidebar { width: 220px; }
 
       #works-table colgroup col.col-medium,
       #works-table colgroup col.col-size { width: 0; }
@@ -210,53 +198,30 @@
 <body>
 
 <div id="page-header">
-  <span id="header-index-spacer"></span><a id="site-name" href="#" onclick="toggleSidebar(event)">Lee Doyub</a><input id="search-input" type="search" placeholder="Search" />
+  <span id="header-index-spacer"></span><span id="site-name-wrap"><a id="site-name" href="#" onclick="toggleSidebar(event)">Lee Doyub</a>
+    <div id="sidebar">
+      <div class="sb-section">
+        <p><strong>Lee Doyub</strong></p>
+        <p>Lee Doyub is a Seoul-based visual artist working across painting, drawing, and installation. His practice explores the materiality of everyday objects and the layered nature of memory. Recent work focuses on the residue left by habitual actions and domestic space.</p>
+      </div>
+      <div class="sb-section">
+        <p>Tel. <a href="tel:+821000000000">+82 10-0000-0000</a></p>
+        <p>Email <a href="mailto:studio@leedoyub.com">studio@leedoyub.com</a></p>
+        <p>Instagram <a href="https://instagram.com/leedoyub" target="_blank" rel="noopener">@leedoyub</a></p>
+      </div>
+      <div class="sb-section">
+        <p><span class="sb-label">Upcoming</span></p>
+        <p><em>Matter of Margin</em><br>04.05 – 05.10.2025<br>Gallery Factory, Seoul</p>
+        <br>
+        <p><em>After Objects</em> (group)<br>06.20 – 07.30.2025<br>ONE AND J. Gallery, Seoul</p>
+        <br>
+        <p>Cité des Arts Residency<br>09 – 11.2025, Paris</p>
+      </div>
+    </div>
+  </span><input id="search-input" type="search" placeholder="Search" />
 </div>
 
-<div id="wrapper">
-
-  <!-- ── Sidebar ── -->
-  <div id="sidebar">
-    <div class="sb-section">
-      <p><strong>Lee Doyub</strong></p>
-      <p>Lee Doyub is a Seoul-based visual artist working across painting, drawing, and installation. His practice explores the materiality of everyday objects and the layered nature of memory. Recent work focuses on the residue left by habitual actions and domestic space.</p>
-    </div>
-
-    <div class="sb-section">
-      <p>Tel. <a href="tel:+821000000000">+82 10-0000-0000</a></p>
-      <p>Email <a href="mailto:studio@leedoyub.com">studio@leedoyub.com</a></p>
-      <p>Instagram <a href="https://instagram.com/leedoyub" target="_blank" rel="noopener">@leedoyub</a></p>
-    </div>
-
-    <div class="sb-section">
-      <p><span class="sb-label">Upcoming</span></p>
-      <p>
-        <em>Matter of Margin</em><br>
-        04.05 – 05.10.2025<br>
-        Gallery Factory, Seoul
-      </p>
-      <br>
-      <p>
-        <em>After Objects</em> (group)<br>
-        06.20 – 07.30.2025<br>
-        ONE AND J. Gallery, Seoul
-      </p>
-      <br>
-      <p>
-        Cité des Arts Residency<br>
-        09 – 11.2025, Paris
-      </p>
-    </div>
-
-    <div class="sb-section">
-      <p><span class="sb-label">Mailing list</span></p>
-      <p><input type="email" placeholder="your@email.com" /></p>
-    </div>
-  </div>
-
-  <!-- ── Main ── -->
-  <div id="main">
-    <table id="works-table">
+<table id="works-table">
       <colgroup>
         <col class="col-index">
         <col class="col-title">
@@ -275,9 +240,6 @@
       </thead>
       <tbody id="works-body"></tbody>
     </table>
-  </div>
-
-</div><!-- /wrapper -->
 
 <script>
   var works = [
