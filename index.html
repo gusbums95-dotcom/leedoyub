@@ -176,8 +176,44 @@
 
     /* ── Mobile ── */
     @media (max-width: 680px) {
-      #sidebar { width: 220px; }
+      body {
+        overflow-x: hidden;
+        font-size: 12px;
+      }
 
+      /* Header: stack vertically */
+      #page-header {
+        display: block;
+        padding: 6px 0;
+      }
+
+      #header-index-spacer {
+        display: none;
+      }
+
+      #site-name-wrap {
+        display: block;
+        width: 100%;
+        margin-bottom: 4px;
+      }
+
+      #search-input {
+        display: block;
+        width: 100%;
+        height: 22px;
+        font-size: 12px;
+      }
+
+      /* Sidebar: full width, border-bottom */
+      #sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #000;
+        padding-left: 0;
+        margin-bottom: 6px;
+      }
+
+      /* Hide medium and size columns */
       #works-table colgroup col.col-medium,
       #works-table colgroup col.col-size { width: 0; }
 
@@ -186,6 +222,28 @@
       #works-table tbody td.col-medium,
       #works-table tbody td.col-size {
         display: none;
+      }
+
+      /* Table */
+      #works-table {
+        table-layout: fixed;
+        width: 100%;
+      }
+
+      #works-table thead th,
+      #works-table tbody tr.work-row td {
+        padding: 2px 4px;
+        font-size: 12px;
+      }
+
+      /* Detail row */
+      tr.detail-row td {
+        padding: 6px 8px 10px 8px;
+        font-size: 12px;
+      }
+
+      .detail-inner {
+        max-width: 100%;
       }
     }
   </style>
