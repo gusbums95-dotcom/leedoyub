@@ -30,10 +30,15 @@
       margin-bottom: 2px;
     }
 
+    #header-index-spacer {
+      width: 50px;
+      flex-shrink: 0;
+    }
+
     #site-name {
       font-size: 14px;
       font-weight: bold;
-      width: calc(22% + 50px);
+      width: 22%;
       flex-shrink: 0;
     }
 
@@ -156,7 +161,7 @@
 <body>
 
 <div id="page-header">
-  <span id="site-name">Lee Doyub</span><input id="search-input" type="search" placeholder="Search" />
+  <span id="header-index-spacer"></span><span id="site-name">Lee Doyub</span><input id="search-input" type="search" placeholder="Search" />
 </div>
 
 <table id="works-table">
