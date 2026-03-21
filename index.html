@@ -225,11 +225,11 @@
       </colgroup>
       <thead>
         <tr>
-          <th class="col-index" id="sort-btn" title="Sort by year">&#9660;</th>
-          <th class="col-title">Title</th>
-          <th class="col-medium">Medium</th>
-          <th class="col-size">Size</th>
-          <th class="col-year">Year</th>
+          <th class="col-index"></th>
+          <th class="col-title" data-col="title" style="cursor:pointer">Title</th>
+          <th class="col-medium" data-col="medium" style="cursor:pointer">Medium</th>
+          <th class="col-size" data-col="size" style="cursor:pointer">Size</th>
+          <th class="col-year" data-col="year" style="cursor:pointer">Year</th>
         </tr>
       </thead>
       <tbody id="works-body"></tbody>
@@ -309,6 +309,7 @@
     }
   ];
 
+  var sortCol = null;
   var sortDesc = true;
   var allRows = [];
 
@@ -325,13 +326,31 @@
     document.getElementById("sidebar").classList.toggle("open");
   }
 
+  function updateHeaders() {
+    document.querySelectorAll("#works-table thead th[data-col]").forEach(function(th) {
+      var col = th.getAttribute("data-col");
+      var label = col.charAt(0).toUpperCase() + col.slice(1);
+      if (col === sortCol) {
+        th.innerHTML = label + " " + (sortDesc ? "&#9660;" : "&#9650;");
+      } else {
+        th.innerHTML = label;
+      }
+    });
+  }
+
   function buildTable() {
     var tbody = document.getElementById("works-body");
     tbody.innerHTML = "";
     allRows = [];
 
     var sorted = works.slice().sort(function(a, b) {
-      return sortDesc ? b.year - a.year : a.year - b.year;
+      if (!sortCol) return 0;
+      var av = String(a[sortCol]).toLowerCase();
+      var bv = String(b[sortCol]).toLowerCase();
+      var cmp = (sortCol === "year")
+        ? (a.year - b.year)
+        : av < bv ? -1 : av > bv ? 1 : 0;
+      return sortDesc ? -cmp : cmp;
     });
 
     sorted.forEach(function(work, i) {
@@ -366,12 +385,20 @@
     });
   }
 
-  document.getElementById("sort-btn").addEventListener("click", function() {
-    sortDesc = !sortDesc;
-    this.innerHTML = sortDesc ? "&#9660;" : "&#9650;";
-    buildTable();
-    var q = document.getElementById("search-input").value.toLowerCase();
-    if (q) filterRows(q);
+  document.querySelectorAll("#works-table thead th[data-col]").forEach(function(th) {
+    th.addEventListener("click", function() {
+      var col = this.getAttribute("data-col");
+      if (sortCol === col) {
+        sortDesc = !sortDesc;
+      } else {
+        sortCol = col;
+        sortDesc = true;
+      }
+      updateHeaders();
+      buildTable();
+      var q = document.getElementById("search-input").value.toLowerCase();
+      if (q) filterRows(q);
+    });
   });
 
   document.getElementById("search-input").addEventListener("input", function() {
