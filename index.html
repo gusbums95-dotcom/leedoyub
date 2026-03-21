@@ -32,7 +32,6 @@
     #page-header {
       display: table;
       width: 100%;
-      border-bottom: 1px solid #000;
       padding-bottom: 4px;
       margin-bottom: 0;
     }
@@ -79,14 +78,8 @@
     }
 
     #works-table thead th.col-index {
-      width: 30px;
       text-align: right;
     }
-
-    #works-table thead th.col-title  { width: auto; }
-    #works-table thead th.col-medium { width: 180px; }
-    #works-table thead th.col-size   { width: 110px; }
-    #works-table thead th.col-year   { width: 50px; text-align: right; }
 
     #works-table tbody tr.work-row {
       cursor: pointer;
@@ -108,7 +101,7 @@
     }
 
     #works-table tbody tr.work-row td.col-year {
-      text-align: right;
+      text-align: left;
     }
 
     /* ── Detail rows ── */
@@ -158,13 +151,20 @@
 </div>
 
 <table id="works-table">
+  <colgroup>
+    <col style="width: 30px">
+    <col style="width: auto">
+    <col style="width: 220px">
+    <col style="width: 130px">
+    <col style="width: 50px">
+  </colgroup>
   <thead>
     <tr>
       <th class="col-index"></th>
       <th class="col-title">Title</th>
       <th class="col-medium">Medium</th>
       <th class="col-size">Size</th>
-      <th class="col-year">Year</th>
+      <th class="col-year" style="text-align:left">Year</th>
     </tr>
   </thead>
   <tbody id="works-body"></tbody>
