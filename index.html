@@ -390,9 +390,16 @@
         e.stopPropagation();
         var td = this;
         if (td.dataset.unit === "cm") {
-          var converted = td.dataset.cm.replace(/[\d.]+/g, function(n) {
-            return Math.round(parseFloat(n) / 2.54 * 10) / 10;
-          }).replace(/cm$/, "in");
+          var orig = td.dataset.cm;
+          var unit, mult;
+          if (/mm/.test(orig))       { unit = "mm"; mult = 1 / 25.4; }
+          else if (/\bm\b/.test(orig)) { unit = "m";  mult = 39.3701; }
+          else                         { unit = "cm"; mult = 1 / 2.54; }
+          var converted = orig
+            .replace(/[\d.]+/g, function(n) {
+              return Math.round(parseFloat(n) * mult * 10) / 10;
+            })
+            .replace(new RegExp(unit, "g"), "in");
           td.textContent = converted;
           td.dataset.unit = "in";
         } else {
