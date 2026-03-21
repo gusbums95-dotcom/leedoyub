@@ -225,7 +225,7 @@
       </colgroup>
       <thead>
         <tr>
-          <th class="col-index" data-col="year" style="cursor:pointer"></th>
+          <th class="col-index" data-col="yearRank" style="cursor:pointer"></th>
           <th class="col-title" data-col="title" style="cursor:pointer">Title</th>
           <th class="col-medium" data-col="medium" style="cursor:pointer">Medium</th>
           <th class="col-size" data-col="size" style="cursor:pointer">Size</th>
@@ -315,7 +315,7 @@
   var byYear = works.slice().sort(function(a, b) { return a.year - b.year; });
   byYear.forEach(function(w, i) { w.yearRank = i + 1; });
 
-  var sortCol = "year";
+  var sortCol = "yearRank";
   var sortDesc = true;
   var allRows = [];
 
@@ -332,7 +332,7 @@
     document.getElementById("sidebar").classList.toggle("open");
   }
 
-  var colLabels = { idx: "", title: "Title", medium: "Medium", size: "Size", year: "Year" };
+  var colLabels = { yearRank: "", title: "Title", medium: "Medium", size: "Size", year: "Year" };
 
   function updateHeaders() {
     document.querySelectorAll("#works-table thead th[data-col]").forEach(function(th) {
@@ -350,7 +350,7 @@
     var sorted = works.slice().sort(function(a, b) {
       if (!sortCol) return 0;
       var cmp;
-      if (sortCol === "idx" || sortCol === "year") {
+      if (sortCol === "yearRank" || sortCol === "year") {
         cmp = a[sortCol] - b[sortCol];
       } else {
         var av = a[sortCol].toLowerCase();
