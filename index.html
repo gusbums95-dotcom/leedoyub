@@ -285,7 +285,7 @@
       detail.innerHTML =
         '<td colspan="5">' +
           '<div class="detail-inner">' +
-            (work.imageUrl ? '<img src="' + esc(work.imageUrl) + '" alt="' + esc(work.title) + '" style="max-width:300px;display:block;margin-top:8px">' : '') +
+            (work.imageUrls && work.imageUrls.length ? '<div style="margin-top:8px">' + work.imageUrls.map(function(url) { return '<img src="' + esc(url) + '" alt="' + esc(work.title) + '" style="max-width:200px;margin-right:8px;display:inline-block;vertical-align:top">'; }).join("") + '</div>' : '') +
             '<div>' + esc(work.description) + '</div>' +
             '<div class="detail-meta">' +
               esc(work.medium) + ' &mdash; ' + esc(work.size) + ' &mdash; ' + esc(String(work.year)) +
@@ -408,7 +408,7 @@
         size: d.size || "",
         year: d.year || 0,
         description: d.description || "",
-        imageUrl: d.imageUrl || ""
+        imageUrls: d.imageUrls || []
       });
     });
 
