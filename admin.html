@@ -23,10 +23,7 @@
       border-bottom: 1px solid #f4f4f4;
       margin-bottom: 12px;
     }
-    #site-name {
-      font-size: 12px;
-      font-weight: bold;
-    }
+    #site-name { font-size: 12px; font-weight: bold; }
     #btn-logout {
       font: normal 12px Arial, Helvetica, sans-serif;
       background: none;
@@ -37,15 +34,8 @@
     #btn-logout:hover { background: #f4f4f4; }
 
     /* ── Login ── */
-    #login-section {
-      max-width: 320px;
-      margin: 60px auto 0;
-    }
-    #login-section h2 {
-      font-size: 12px;
-      font-weight: bold;
-      margin-bottom: 12px;
-    }
+    #login-section { max-width: 320px; margin: 60px auto 0; }
+    #login-section h2 { font-size: 12px; font-weight: bold; margin-bottom: 12px; }
     .field { margin-bottom: 8px; }
     .field label { display: block; margin-bottom: 2px; }
     .field input[type="email"],
@@ -62,6 +52,65 @@
     /* ── Admin panel ── */
     #admin-section { display: none; }
 
+    /* ── Section headings ── */
+    .admin-section-heading {
+      font-size: 11px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-top: 1px solid #f4f4f4;
+      border-bottom: 1px solid #f4f4f4;
+      padding: 2px 0;
+      margin-bottom: 10px;
+    }
+    .admin-section-wrap { margin-bottom: 24px; }
+
+    /* ── Profile form ── */
+    #profile-form .field input[type="text"],
+    #profile-form .field textarea {
+      font: normal 12px Arial, Helvetica, sans-serif;
+      border: 1px solid #ccc;
+      padding: 3px 5px;
+      box-sizing: border-box;
+    }
+    #profile-form .field input[type="text"] { width: 320px; height: 22px; }
+    #profile-form .field textarea { width: 560px; height: 70px; resize: vertical; }
+
+    /* ── Upcoming list ── */
+    #upcoming-list { margin-bottom: 8px; }
+    .upcoming-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+    .upcoming-row input {
+      font: normal 12px Arial, Helvetica, sans-serif;
+      border: 1px solid #ccc;
+      padding: 3px 5px;
+      height: 22px;
+      box-sizing: border-box;
+    }
+    .upcoming-row .inp-title     { width: 200px; }
+    .upcoming-row .inp-daterange { width: 160px; }
+    .upcoming-row .inp-venue     { width: 200px; }
+
+    .btn-small {
+      font: normal 11px Arial, Helvetica, sans-serif;
+      background: none;
+      border: 1px solid #ccc;
+      padding: 2px 6px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .btn-small:hover { background: #f4f4f4; }
+    .btn-small.del { color: #900; border-color: #ccc; }
+    .btn-small.del:hover { background: #fff0f0; }
+
+    #profile-status { font-size: 11px; color: green; margin-left: 10px; }
+    #profile-error  { font-size: 11px; color: red; }
+
+    /* ── Works table ── */
     #btn-add {
       font: normal 12px Arial, Helvetica, sans-serif;
       background: none;
@@ -72,16 +121,15 @@
     }
     #btn-add:hover { background: #f4f4f4; }
 
-    /* ── Works table ── */
     #works-table {
       width: 100%;
       border-collapse: collapse;
       table-layout: fixed;
     }
-    #works-table colgroup col.col-title  { width: 30%; }
-    #works-table colgroup col.col-medium { width: auto; }
-    #works-table colgroup col.col-size   { width: 120px; }
-    #works-table colgroup col.col-year   { width: 55px; }
+    #works-table colgroup col.col-title   { width: 30%; }
+    #works-table colgroup col.col-medium  { width: auto; }
+    #works-table colgroup col.col-size    { width: 120px; }
+    #works-table colgroup col.col-year    { width: 55px; }
     #works-table colgroup col.col-actions { width: 100px; }
 
     #works-table thead tr {
@@ -96,9 +144,7 @@
       padding: 2px 6px;
       text-align: left;
     }
-    #works-table tbody tr {
-      border-bottom: 1px solid #f4f4f4;
-    }
+    #works-table tbody tr { border-bottom: 1px solid #f4f4f4; }
     #works-table tbody td {
       padding: 2px 6px;
       vertical-align: top;
@@ -122,7 +168,7 @@
     .btn-action.del { color: #900; }
     .btn-action.del:hover { color: #f00; }
 
-    /* ── Form overlay ── */
+    /* ── Work form overlay ── */
     #form-overlay {
       display: none;
       position: fixed;
@@ -139,11 +185,7 @@
       max-width: 96vw;
       box-sizing: border-box;
     }
-    #work-form-wrap h2 {
-      font-size: 12px;
-      font-weight: bold;
-      margin-bottom: 14px;
-    }
+    #work-form-wrap h2 { font-size: 12px; font-weight: bold; margin-bottom: 14px; }
     #work-form .field input[type="text"],
     #work-form .field input[type="number"],
     #work-form .field textarea {
@@ -153,10 +195,7 @@
       border: 1px solid #ccc;
       padding: 3px 5px;
     }
-    #work-form .field textarea {
-      height: 80px;
-      resize: vertical;
-    }
+    #work-form .field textarea { height: 80px; resize: vertical; }
     #form-actions { margin-top: 14px; display: flex; gap: 8px; }
     #form-actions button {
       font: normal 12px Arial, Helvetica, sans-serif;
@@ -199,29 +238,68 @@
 
 <!-- Admin panel -->
 <div id="admin-section">
-  <button id="btn-add">+ Add work</button>
-  <table id="works-table">
-    <colgroup>
-      <col class="col-title">
-      <col class="col-medium">
-      <col class="col-size">
-      <col class="col-year">
-      <col class="col-actions">
-    </colgroup>
-    <thead>
-      <tr>
-        <th class="col-title">Title</th>
-        <th class="col-medium">Medium</th>
-        <th class="col-size">Size</th>
-        <th class="col-year">Year</th>
-        <th class="col-actions"></th>
-      </tr>
-    </thead>
-    <tbody id="works-body"></tbody>
-  </table>
+
+  <!-- Profile -->
+  <div class="admin-section-wrap">
+    <div class="admin-section-heading">Profile</div>
+    <form id="profile-form">
+      <div class="field" style="margin-bottom:8px">
+        <label for="p-bio">Bio</label>
+        <textarea id="p-bio"></textarea>
+      </div>
+      <div class="field" style="margin-bottom:8px">
+        <label for="p-phone">Phone</label>
+        <input id="p-phone" type="text" />
+      </div>
+      <div class="field" style="margin-bottom:8px">
+        <label for="p-email">Email</label>
+        <input id="p-email" type="text" />
+      </div>
+      <div class="field" style="margin-bottom:8px">
+        <label for="p-instagram">Instagram handle</label>
+        <input id="p-instagram" type="text" placeholder="@handle" />
+      </div>
+      <div class="field" style="margin-bottom:6px">
+        <label>Upcoming exhibitions</label>
+        <div id="upcoming-list"></div>
+        <button type="button" id="btn-add-upcoming" class="btn-small">+ Add exhibition</button>
+      </div>
+      <div style="margin-top:10px; display:flex; align-items:center; gap:8px;">
+        <button type="submit" style="font:bold 12px Arial,Helvetica,sans-serif; border:1px solid #ccc; background:none; padding:3px 12px; cursor:pointer;">Save profile</button>
+        <span id="profile-status"></span>
+        <span id="profile-error"></span>
+      </div>
+    </form>
+  </div>
+
+  <!-- Works -->
+  <div class="admin-section-wrap">
+    <div class="admin-section-heading">Works</div>
+    <button id="btn-add">+ Add work</button>
+    <table id="works-table">
+      <colgroup>
+        <col class="col-title">
+        <col class="col-medium">
+        <col class="col-size">
+        <col class="col-year">
+        <col class="col-actions">
+      </colgroup>
+      <thead>
+        <tr>
+          <th class="col-title">Title</th>
+          <th class="col-medium">Medium</th>
+          <th class="col-size">Size</th>
+          <th class="col-year">Year</th>
+          <th class="col-actions"></th>
+        </tr>
+      </thead>
+      <tbody id="works-body"></tbody>
+    </table>
+  </div>
+
 </div>
 
-<!-- Add / Edit form overlay -->
+<!-- Add / Edit work form overlay -->
 <div id="form-overlay">
   <div id="work-form-wrap">
     <h2 id="form-title">Add work</h2>
@@ -282,6 +360,7 @@
       document.getElementById("login-section").style.display = "none";
       document.getElementById("admin-section").style.display = "block";
       document.getElementById("btn-logout").style.display = "";
+      loadProfile();
       loadWorks();
     } else {
       document.getElementById("login-section").style.display = "";
@@ -293,10 +372,11 @@
   // ── Login ───────────────────────────────────────────────────────────────────
   document.getElementById("login-form").addEventListener("submit", function(e) {
     e.preventDefault();
-    var email = document.getElementById("input-email").value;
-    var password = document.getElementById("input-password").value;
     document.getElementById("login-error").textContent = "";
-    auth.signInWithEmailAndPassword(email, password).catch(function(err) {
+    auth.signInWithEmailAndPassword(
+      document.getElementById("input-email").value,
+      document.getElementById("input-password").value
+    ).catch(function(err) {
       document.getElementById("login-error").textContent = err.message;
     });
   });
@@ -305,7 +385,73 @@
     auth.signOut();
   });
 
-  // ── Load works ──────────────────────────────────────────────────────────────
+  // ── Profile ─────────────────────────────────────────────────────────────────
+  function loadProfile() {
+    db.collection("profile").doc("main").get().then(function(doc) {
+      var d = doc.exists ? doc.data() : {};
+      document.getElementById("p-bio").value = d.bio || "";
+      document.getElementById("p-phone").value = d.phone || "";
+      document.getElementById("p-email").value = d.email || "";
+      document.getElementById("p-instagram").value = d.instagram || "";
+      var list = document.getElementById("upcoming-list");
+      list.innerHTML = "";
+      (d.upcoming || []).forEach(function(item) {
+        addUpcomingRow(item.title, item.dateRange, item.venue);
+      });
+    });
+  }
+
+  function addUpcomingRow(title, dateRange, venue) {
+    var row = document.createElement("div");
+    row.className = "upcoming-row";
+    row.innerHTML =
+      '<input type="text" class="inp-title" placeholder="Title" value="' + esc(title || "") + '" />' +
+      '<input type="text" class="inp-daterange" placeholder="Date range" value="' + esc(dateRange || "") + '" />' +
+      '<input type="text" class="inp-venue" placeholder="Venue" value="' + esc(venue || "") + '" />' +
+      '<button type="button" class="btn-small del">Remove</button>';
+    row.querySelector(".del").addEventListener("click", function() {
+      row.parentNode.removeChild(row);
+    });
+    document.getElementById("upcoming-list").appendChild(row);
+  }
+
+  document.getElementById("btn-add-upcoming").addEventListener("click", function() {
+    addUpcomingRow("", "", "");
+  });
+
+  document.getElementById("profile-form").addEventListener("submit", function(e) {
+    e.preventDefault();
+    document.getElementById("profile-status").textContent = "";
+    document.getElementById("profile-error").textContent = "";
+
+    var upcoming = [];
+    document.querySelectorAll("#upcoming-list .upcoming-row").forEach(function(row) {
+      upcoming.push({
+        title:     row.querySelector(".inp-title").value.trim(),
+        dateRange: row.querySelector(".inp-daterange").value.trim(),
+        venue:     row.querySelector(".inp-venue").value.trim()
+      });
+    });
+
+    var data = {
+      bio:       document.getElementById("p-bio").value.trim(),
+      phone:     document.getElementById("p-phone").value.trim(),
+      email:     document.getElementById("p-email").value.trim(),
+      instagram: document.getElementById("p-instagram").value.trim(),
+      upcoming:  upcoming
+    };
+
+    db.collection("profile").doc("main").set(data).then(function() {
+      document.getElementById("profile-status").textContent = "Saved.";
+      setTimeout(function() {
+        document.getElementById("profile-status").textContent = "";
+      }, 2000);
+    }).catch(function(err) {
+      document.getElementById("profile-error").textContent = err.message;
+    });
+  });
+
+  // ── Works ───────────────────────────────────────────────────────────────────
   function loadWorks() {
     db.collection("works").orderBy("year", "desc").get().then(function(snapshot) {
       var tbody = document.getElementById("works-body");
@@ -324,7 +470,6 @@
           '</td>';
         tbody.appendChild(tr);
       });
-
       tbody.querySelectorAll(".edit-btn").forEach(function(btn) {
         btn.addEventListener("click", function() { openEdit(this.dataset.id); });
       });
@@ -334,7 +479,7 @@
     });
   }
 
-  // ── Add / Edit form ─────────────────────────────────────────────────────────
+  // ── Add / Edit work form ─────────────────────────────────────────────────────
   document.getElementById("btn-add").addEventListener("click", function() {
     editingId = null;
     document.getElementById("form-title").textContent = "Add work";
@@ -373,10 +518,10 @@
   document.getElementById("work-form").addEventListener("submit", function(e) {
     e.preventDefault();
     var data = {
-      title: document.getElementById("f-title").value.trim(),
-      medium: document.getElementById("f-medium").value.trim(),
-      size: document.getElementById("f-size").value.trim(),
-      year: parseInt(document.getElementById("f-year").value, 10),
+      title:       document.getElementById("f-title").value.trim(),
+      medium:      document.getElementById("f-medium").value.trim(),
+      size:        document.getElementById("f-size").value.trim(),
+      year:        parseInt(document.getElementById("f-year").value, 10),
       description: document.getElementById("f-description").value.trim()
     };
     document.getElementById("form-error").textContent = "";
@@ -391,7 +536,6 @@
     });
   });
 
-  // ── Delete ──────────────────────────────────────────────────────────────────
   function deleteWork(id) {
     if (!confirm("Delete this work?")) return;
     db.collection("works").doc(id).delete().then(function() {
