@@ -282,7 +282,11 @@
       user-select: none;
     }
     .img-add-btn:hover { background: #d0d0d0; }
-    #upload-progress { font-size: 11px; color: #555; margin-top: 4px; }
+    #progress-wrap { margin-top: 6px; display: none; }
+    #progress-text { font-size: 11px; color: #555; margin-bottom: 3px; }
+    #progress-bar-track { width: 100%; background: #e8e8e8; height: 3px; }
+    #progress-bar { height: 3px; background: #000; width: 0%; }
+    #btn-save:disabled { opacity: 0.45; cursor: default; }
 
     button[type="submit"] { font-weight: bold; }
 
@@ -426,7 +430,10 @@
         <label>Images</label>
         <input id="f-image-hidden" type="file" accept="image/*" multiple style="display:none" />
         <div id="img-strip"></div>
-        <div id="upload-progress"></div>
+        <div id="progress-wrap">
+          <div id="progress-text"></div>
+          <div id="progress-bar-track"><div id="progress-bar"></div></div>
+        </div>
       </div>
       <div id="form-error"></div>
       <div id="form-actions">
@@ -463,8 +470,16 @@
   var editingId = null;
 
   // ── Image strip state ────────────────────────────────────────────────────────
-  var existingUrls  = [];   // URLs already saved in Firestore
-  var pendingImages = [];   // { file, objectUrl } — newly selected, not yet uploaded
+  var existingUrls         = [];  // display URLs already in Firestore
+  var existingOriginalUrls = [];  // original URLs already in Firestore
+  var pendingImages        = [];  // { file, objectUrl } — newly selected, not yet uploaded
+
+  function setProgress(text, pct) {
+    var wrap = document.getElementById("progress-wrap");
+    wrap.style.display = text ? "block" : "none";
+    document.getElementById("progress-text").textContent = text;
+    if (pct >= 0) document.getElementById("progress-bar").style.width = pct + "%";
+  }
 
   function renderImgStrip() {
     var strip = document.getElementById("img-strip");
@@ -674,12 +689,11 @@
   // ── Add / Edit work form ─────────────────────────────────────────────────────
   document.getElementById("btn-add").addEventListener("click", function() {
     editingId = null;
-    existingUrls = [];
-    pendingImages = [];
+    existingUrls = []; existingOriginalUrls = []; pendingImages = [];
     document.getElementById("form-title").textContent = "Add work";
     document.getElementById("work-form").reset();
     document.getElementById("form-error").textContent = "";
-    document.getElementById("upload-progress").textContent = "";
+    setProgress("", -1);
     renderImgStrip();
     document.getElementById("form-overlay").classList.add("open");
   });
@@ -693,10 +707,10 @@
   function closeForm() {
     document.getElementById("form-overlay").classList.remove("open");
     pendingImages.forEach(function(item) { URL.revokeObjectURL(item.objectUrl); });
-    existingUrls  = [];
-    pendingImages = [];
+    existingUrls = []; existingOriginalUrls = []; pendingImages = [];
     document.getElementById("img-strip").innerHTML = "";
-    document.getElementById("upload-progress").textContent = "";
+    setProgress("", -1);
+    document.getElementById("btn-save").disabled = false;
     editingId = null;
   }
 
@@ -711,9 +725,10 @@
       document.getElementById("f-size").value = d.size || "";
       document.getElementById("f-year").value = d.year || "";
       document.getElementById("f-description").value = d.description || "";
-      existingUrls  = (d.imageUrls || []).slice();
-      pendingImages = [];
-      document.getElementById("upload-progress").textContent = "";
+      existingUrls         = (d.imageUrls || []).slice();
+      existingOriginalUrls = (d.imageUrlsOriginal || []).slice();
+      pendingImages        = [];
+      setProgress("", -1);
       renderImgStrip();
       document.getElementById("form-error").textContent = "";
       document.getElementById("form-overlay").classList.add("open");
@@ -723,7 +738,6 @@
   document.getElementById("work-form").addEventListener("submit", function(e) {
     e.preventDefault();
     document.getElementById("form-error").textContent = "";
-    document.getElementById("upload-progress").textContent = "";
 
     var data = {
       title:       document.getElementById("f-title").value.trim(),
@@ -733,41 +747,83 @@
       description: document.getElementById("f-description").value.trim()
     };
 
-    var compressOpts = { maxSizeMB: 0.3, maxWidthOrHeight: 1200, useWebWorker: true };
-    var uploadedUrls = [];
+    var displayOpts = { maxSizeMB: 0.1, maxWidthOrHeight: 1800, useWebWorker: true, initialQuality: 0.8 };
+    var uploadedDisplayUrls   = [];
+    var uploadedOriginalUrls  = [];
+    var total = pendingImages.length;
 
     function saveDoc() {
-      data.imageUrls = existingUrls.concat(uploadedUrls);
+      data.imageUrls         = existingUrls.concat(uploadedDisplayUrls);
+      data.imageUrlsOriginal = existingOriginalUrls.concat(uploadedOriginalUrls);
       var promise = editingId
         ? db.collection("works").doc(editingId).set(data, { merge: true })
-        : db.collection("works").add(Object.assign({ imageUrls: [] }, data));
+        : db.collection("works").add(Object.assign({ imageUrls: [], imageUrlsOriginal: [] }, data));
       promise.then(function() {
-        document.getElementById("upload-progress").textContent =
-          pendingImages.length ? "Done" : "";
-        setTimeout(function() { closeForm(); loadWorks(); },
-          pendingImages.length ? 600 : 0);
+        setProgress("Done", 100);
+        setTimeout(function() { closeForm(); loadWorks(); }, 700);
       }).catch(function(err) {
+        document.getElementById("btn-save").disabled = false;
         document.getElementById("form-error").textContent = err.message;
       });
     }
 
-    var total = pendingImages.length;
-
     if (total === 0) { saveDoc(); return; }
+
+    document.getElementById("btn-save").disabled = true;
 
     function uploadNext(i) {
       if (i >= total) { saveDoc(); return; }
-      document.getElementById("upload-progress").textContent =
-        "Uploading image " + (i + 1) + " of " + total + "...";
-      var filename = pendingImages[i].file.name;
-      imageCompression(pendingImages[i].file, compressOpts).then(function(compressed) {
-        var ref = storage.ref("works/" + Date.now() + "_" + filename);
-        return ref.put(compressed).then(function() { return ref.getDownloadURL(); });
-      }).then(function(url) {
-        uploadedUrls.push(url);
-        setTimeout(function() { uploadNext(i + 1); }, 500);
+
+      var file = pendingImages[i].file;
+      var ts   = Date.now();
+      var name = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+
+      setProgress("Compressing " + (i + 1) + " / " + total + "...", -1);
+
+      imageCompression(file, displayOpts).then(function(compressed) {
+
+        // ── Upload display version ──
+        var displayRef = storage.ref("works/display_" + ts + "_" + name);
+        var displayTask = displayRef.put(compressed);
+
+        displayTask.on("state_changed",
+          function(snap) {
+            var pct = Math.round(snap.bytesTransferred / snap.totalBytes * 100);
+            setProgress("Uploading " + (i + 1) + " / " + total + " images... " + pct + "%", pct);
+          },
+          function(err) {
+            document.getElementById("btn-save").disabled = false;
+            setProgress("", -1);
+            document.getElementById("form-error").textContent = err.message;
+          },
+          function() {
+            displayRef.getDownloadURL().then(function(displayUrl) {
+              uploadedDisplayUrls.push(displayUrl);
+
+              // ── Upload original version ──
+              var origRef  = storage.ref("works/original_" + ts + "_" + name);
+              var origTask = origRef.put(file);
+
+              origTask.on("state_changed", null,
+                function(err) {
+                  document.getElementById("btn-save").disabled = false;
+                  setProgress("", -1);
+                  document.getElementById("form-error").textContent = err.message;
+                },
+                function() {
+                  origRef.getDownloadURL().then(function(origUrl) {
+                    uploadedOriginalUrls.push(origUrl);
+                    setTimeout(function() { uploadNext(i + 1); }, 500);
+                  });
+                }
+              );
+            });
+          }
+        );
+
       }).catch(function(err) {
-        document.getElementById("upload-progress").textContent = "";
+        document.getElementById("btn-save").disabled = false;
+        setProgress("", -1);
         document.getElementById("form-error").textContent = err.message;
       });
     }
