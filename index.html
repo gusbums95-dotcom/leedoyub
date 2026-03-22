@@ -180,6 +180,7 @@
 <!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-storage-compat.js"></script>
 
 <div id="page-header">
   <span id="header-index-spacer"></span><span id="site-name-wrap"><a id="site-name" href="#" onclick="toggleSidebar(event)">Lee Doyub</a></span><input id="search-input" type="search" placeholder="Search" />
@@ -284,6 +285,7 @@
       detail.innerHTML =
         '<td colspan="5">' +
           '<div class="detail-inner">' +
+            (work.imageUrl ? '<img src="' + esc(work.imageUrl) + '" alt="' + esc(work.title) + '" style="max-width:300px;display:block;margin-top:8px">' : '') +
             '<div>' + esc(work.description) + '</div>' +
             '<div class="detail-meta">' +
               esc(work.medium) + ' &mdash; ' + esc(work.size) + ' &mdash; ' + esc(String(work.year)) +
@@ -405,7 +407,8 @@
         medium: d.medium || "",
         size: d.size || "",
         year: d.year || 0,
-        description: d.description || ""
+        description: d.description || "",
+        imageUrl: d.imageUrl || ""
       });
     });
 

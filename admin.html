@@ -207,6 +207,22 @@
     #form-actions button:hover { background: #f4f4f4; }
     #form-error { color: red; font-size: 11px; margin-top: 6px; }
 
+    #img-preview {
+      display: none;
+      max-width: 160px;
+      max-height: 120px;
+      margin-top: 6px;
+      border: 1px solid #eee;
+    }
+    #img-current {
+      display: none;
+      max-width: 160px;
+      max-height: 120px;
+      margin-top: 6px;
+      border: 1px solid #eee;
+    }
+    #upload-progress { font-size: 11px; color: #555; margin-top: 4px; }
+
     button[type="submit"] { font-weight: bold; }
 
     @media (max-width: 680px) {
@@ -343,6 +359,13 @@
         <label for="f-description">Description</label>
         <textarea id="f-description" required></textarea>
       </div>
+      <div class="field">
+        <label for="f-image">Image</label>
+        <input id="f-image" type="file" accept="image/*" />
+        <img id="img-preview" alt="preview" />
+        <img id="img-current" alt="current image" />
+        <div id="upload-progress"></div>
+      </div>
       <div id="form-error"></div>
       <div id="form-actions">
         <button type="submit" id="btn-save">Save</button>
@@ -356,6 +379,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-storage-compat.js"></script>
 
 <script>
   var firebaseConfig = {
@@ -370,6 +394,7 @@
   firebase.initializeApp(firebaseConfig);
   var auth = firebase.auth();
   var db = firebase.firestore();
+  var storage = firebase.storage();
 
   var editingId = null;
 
@@ -515,8 +540,22 @@
 
   function closeForm() {
     document.getElementById("form-overlay").classList.remove("open");
+    document.getElementById("img-preview").style.display = "none";
+    document.getElementById("img-current").style.display = "none";
+    document.getElementById("upload-progress").textContent = "";
     editingId = null;
   }
+
+  document.getElementById("f-image").addEventListener("change", function() {
+    var file = this.files[0];
+    var preview = document.getElementById("img-preview");
+    if (file) {
+      preview.src = URL.createObjectURL(file);
+      preview.style.display = "block";
+    } else {
+      preview.style.display = "none";
+    }
+  });
 
   function openEdit(id) {
     db.collection("works").doc(id).get().then(function(doc) {
@@ -529,6 +568,16 @@
       document.getElementById("f-size").value = d.size || "";
       document.getElementById("f-year").value = d.year || "";
       document.getElementById("f-description").value = d.description || "";
+      document.getElementById("f-image").value = "";
+      document.getElementById("img-preview").style.display = "none";
+      document.getElementById("upload-progress").textContent = "";
+      var current = document.getElementById("img-current");
+      if (d.imageUrl) {
+        current.src = d.imageUrl;
+        current.style.display = "block";
+      } else {
+        current.style.display = "none";
+      }
       document.getElementById("form-error").textContent = "";
       document.getElementById("form-overlay").classList.add("open");
     });
@@ -536,6 +585,9 @@
 
   document.getElementById("work-form").addEventListener("submit", function(e) {
     e.preventDefault();
+    document.getElementById("form-error").textContent = "";
+    document.getElementById("upload-progress").textContent = "";
+
     var data = {
       title:       document.getElementById("f-title").value.trim(),
       medium:      document.getElementById("f-medium").value.trim(),
@@ -543,16 +595,38 @@
       year:        parseInt(document.getElementById("f-year").value, 10),
       description: document.getElementById("f-description").value.trim()
     };
-    document.getElementById("form-error").textContent = "";
-    var promise = editingId
-      ? db.collection("works").doc(editingId).set(data)
-      : db.collection("works").add(data);
-    promise.then(function() {
-      closeForm();
-      loadWorks();
-    }).catch(function(err) {
-      document.getElementById("form-error").textContent = err.message;
-    });
+
+    var file = document.getElementById("f-image").files[0];
+
+    function saveDoc(imageUrl) {
+      if (imageUrl !== null) data.imageUrl = imageUrl;
+      var promise = editingId
+        ? db.collection("works").doc(editingId).set(data, { merge: true })
+        : db.collection("works").add(Object.assign({ imageUrl: "" }, data));
+      promise.then(function() {
+        closeForm();
+        loadWorks();
+      }).catch(function(err) {
+        document.getElementById("form-error").textContent = err.message;
+      });
+    }
+
+    if (file) {
+      var path = "works/" + data.title.replace(/[^a-zA-Z0-9]/g, "_") + "_" + Date.now();
+      var ref = storage.ref(path);
+      document.getElementById("upload-progress").textContent = "Uploading…";
+      ref.put(file).then(function() {
+        return ref.getDownloadURL();
+      }).then(function(url) {
+        document.getElementById("upload-progress").textContent = "";
+        saveDoc(url);
+      }).catch(function(err) {
+        document.getElementById("upload-progress").textContent = "";
+        document.getElementById("form-error").textContent = err.message;
+      });
+    } else {
+      saveDoc(null);
+    }
   });
 
   function deleteWork(id) {
