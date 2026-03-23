@@ -222,9 +222,8 @@
     #sb-links a {
       color: #000;
       text-decoration: none;
-      white-space: nowrap;
     }
-    #sb-links a:hover .link-name {
+    #sb-links a:hover {
       text-decoration: underline;
     }
 
@@ -475,7 +474,7 @@
       var linksHtml = '<p>Other links: ';
       otherLinks.forEach(function(link, i) {
         if (i > 0) linksHtml += '&nbsp;&nbsp;';
-        linksHtml += '<a href="' + esc(link.url) + '" target="_blank" rel="noopener"><span class="link-name">' + esc(link.name) + '</span> 📎</a>';
+        linksHtml += esc(link.name) + ' <a href="' + esc(link.url) + '" target="_blank" rel="noopener">📎</a>';
       });
       linksHtml += '</p>';
       document.getElementById("sb-links").innerHTML = linksHtml;
