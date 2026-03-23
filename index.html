@@ -3,7 +3,7 @@
 <head>
   <link rel="icon" type="image/png" href="/favicon.png">
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=1200, initial-scale=0.5" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Lee Doyub</title>
   <style>
     * {
@@ -217,6 +217,34 @@
 
     tr.work-row {
       cursor: pointer;
+    }
+
+    @media (max-width: 640px) {
+      body { margin: 4px; }
+
+      #page-header { padding: 8px 0; }
+
+      #header-index-spacer { width: 24px; }
+
+      #site-name { padding-left: 3px; }
+
+      #search-input { width: 28%; }
+
+      #sidebar { padding-left: 24px; }
+      #sidebar.open { max-height: 900px; }
+
+      #works-table colgroup col.col-index { width: 28px; }
+      #works-table colgroup col.col-year  { width: 36px; }
+
+      #works-table thead th.col-medium,
+      #works-table thead th.col-size,
+      #works-table tbody td.col-medium,
+      #works-table tbody td.col-size { display: none; }
+
+      #works-table thead th,
+      #works-table tbody td { padding: 2px 3px; font-size: 12px; }
+
+      #works-table tbody tr.work-row td.col-index { font-size: 11px; }
     }
 
     #sb-links a {
