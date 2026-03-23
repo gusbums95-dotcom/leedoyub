@@ -234,12 +234,20 @@
       #sidebar.open { max-height: 900px; }
 
       #works-table thead th.col-medium,
-      #works-table tbody td.col-medium,
-      #works-table thead th.col-size,
-      #works-table tbody td.col-size { display: none; }
+      #works-table tbody td.col-medium { display: none; }
+
+      #works-table { width: 100%; table-layout: fixed; }
+
+      #works-table colgroup col.col-index  { width: 10%; }
+      #works-table colgroup col.col-title  { width: 55%; }
+      #works-table colgroup col.col-size   { width: 20%; }
+      #works-table colgroup col.col-year   { width: 15%; }
 
       #works-table thead th,
-      #works-table tbody td { padding: 2px 3px; font-size: 12px; }
+      #works-table tbody td { padding: 2px 4px; font-size: 11px; word-break: break-word; }
+
+      #works-table thead th { font-weight: normal; }
+      #works-table thead th.col-title { font-weight: bold; }
     }
 
     #sb-links a {
