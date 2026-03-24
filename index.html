@@ -471,7 +471,19 @@
         });
       }
 
+      var touchStartY = 0;
+      var touchMoved = false;
+      tr.addEventListener("touchstart", function(e) {
+        touchStartY = e.touches[0].clientY;
+        touchMoved = false;
+      }, { passive: true });
+      tr.addEventListener("touchmove", function(e) {
+        if (Math.abs(e.touches[0].clientY - touchStartY) > 10) {
+          touchMoved = true;
+        }
+      }, { passive: true });
       tr.addEventListener("click", function() {
+        if (touchMoved) return;
         detail.classList.toggle("open");
         if (!detail.classList.contains("open")) {
           var exp = detail.querySelector(".img-expanded");
