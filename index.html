@@ -88,11 +88,8 @@
       border-radius: 0;
       padding: 0 3px;
       height: 14px;
-      width: calc(30.5% + 5px);
-      margin-left: auto;
-      margin-right: 4%;
+      width: 12%;
       flex-shrink: 0;
-      box-sizing: border-box;
       background: #BBF3E7;
     }
 
@@ -233,7 +230,7 @@
 
       #site-name { padding-left: 3px; }
 
-      #search-input { width: 32%; margin-right: 4%; }
+      #search-input { width: 28%; }
 
       #sidebar { padding-left: 24px; }
       #sidebar.open { max-height: 900px; }
@@ -414,14 +411,12 @@
   }
 
   function renderTable() {
-    var si = document.getElementById("search-input");
-    var q = si ? si.value : "";
     updateColgroup();
     updateThead();
-    document.getElementById("search-input").value = q;
     updateHeaders();
     buildTable();
-    if (q) filterRows(q.toLowerCase());
+    var q = document.getElementById("search-input").value.toLowerCase();
+    if (q) filterRows(q);
   }
 
   function buildTable() {
