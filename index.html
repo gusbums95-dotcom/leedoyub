@@ -528,7 +528,7 @@ function renderTable() {
           var orig = td.dataset.cm;
           var unit, mult;
           if (/mm/.test(orig))         { unit = "mm"; mult = 1 / 25.4; }
-          else if (/\bm\b/.test(orig)) { unit = "m";  mult = 39.3701; }
+          else if (/\\bm\\b/.test(orig)) { unit = "m";  mult = 39.3701; }
           else                         { unit = "cm"; mult = 1 / 2.54; }
           var converted = orig
             .replace(/[\d.]+/g, function(n) {
@@ -578,7 +578,7 @@ function renderTable() {
     var email     = (d.email || "").trim();
     var instagram = (d.instagram || "").trim();
     var contactHtml = "";
-    if (phone)     contactHtml += '<p>Tel. <a href="tel:' + esc(phone.replace(/\s/g, "")) + '">' + esc(phone) + '</a></p>';
+    if (phone)     contactHtml += '<p>Tel. <a href="tel:' + esc(phone.replace(/\\s/g, "")) + '">' + esc(phone) + '</a></p>';
     if (email)     contactHtml += '<p>Email <a href="mailto:' + esc(email) + '">' + esc(email) + '</a></p>';
     if (instagram) {
       var handle = instagram.replace(/^@/, "");
@@ -639,11 +639,15 @@ function renderTable() {
     renderTable();
   });
 
-  var resizeTimer;
-  window.addEventListener("resize", function() {
+var resizeTimer;
+var lastWidth = window.innerWidth;
+window.addEventListener("resize", function() {
+  if (window.innerWidth !== lastWidth) {
+    lastWidth = window.innerWidth;
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(renderTable, 150);
-  });
+  }
+});
 </script>
 </body>
 </html>
