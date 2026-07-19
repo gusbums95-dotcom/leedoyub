@@ -1,6 +1,6 @@
-# leedoyup
+# leedoyub
 
-Portfolio website for visual artist leedoyup.
+Portfolio website for visual artist leedoyub.
 
 Single HTML file — no build step, no dependencies. Deploys directly to Cloudflare Pages or any static host.
 
